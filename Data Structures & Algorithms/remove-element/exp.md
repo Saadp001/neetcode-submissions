@@ -22,3 +22,20 @@ class Solution:
 ```
 
 Trace it yourself on `nums = [3,2,2,3], val = 3` before running it — walk through what `k` and `nums` look like at each step. Want to try that, or do you want me to walk through it first?
+
+`k` is not an array — it's just an integer, a pointer/index into `nums` itself. There's no second array being created. `nums` is being overwritten **in place**.
+
+Trace on `nums = [3,2,2,3], val = 3`:
+
+Start: `k = 0`, `nums = [3,2,2,3]`
+
+`i=0`: `nums[0]=3`, equals val → skip, `k` stays 0
+`i=1`: `nums[1]=2`, not val → `nums[0] = nums[1]` → `nums` becomes `[2,2,2,3]`. `k` becomes 1
+`i=2`: `nums[2]=2`, not val → `nums[1] = nums[2]` → `nums` becomes `[2,2,2,3]` (no visible change since both were 2). `k` becomes 2
+`i=3`: `nums[3]=3`, equals val → skip, `k` stays 2
+
+Loop ends. `nums = [2,2,2,3]`, return `k = 2`.
+
+The first `k` elements of `nums` (`nums[0]` and `nums[1]`, i.e. `[2,2]`) are the "kept" elements — exactly what the problem wants. Whatever's sitting in `nums[2:]` afterward is leftover garbage; the problem doesn't care what's there, it only checks the first `k` elements.
+
+So `k` is doing two jobs: it's the **write position** (where the next valid element should go) and, once the loop ends, it doubles as the **count** of valid elements — which is exactly what the function needs to return.
